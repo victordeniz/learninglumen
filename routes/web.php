@@ -15,11 +15,25 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 
-$app->get('/hello/world', function() use ($app) {
+$app->get('/hello/world', function() {
     return "Hello world!";
 });
 
-$app->get('/hello/{name}', function ($name) use ($app) {
+$app->get('/hello/{name}', ['middleware' => 'hello', function ($name) {
     return "Hello {$name}";
+}]);
+
+$app->get('/request', function (Illuminate\Http\Request $request) {
+    return "Hello " . $request->get('name', 'stranger');
 });
 
+$app->get('/response', function (\Illuminate\Http\Request $request) {
+    if ($request->wantsJson()) {
+        return response()->json(['greeting' => 'Hello stranger']);
+    }
+
+    /*return (new \Illuminate\Http\Response('Hello stranger', 200))
+        ->header('Content-Type', 'text/plain');*/
+    return response()
+        ->make('Hello stranger', 200, ['Content-Type' => 'text/plain']);
+});

@@ -23,7 +23,7 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-// $app->withFacades();
+$app->withFacades();
 
 // $app->withEloquent();
 
@@ -66,6 +66,14 @@ $app->singleton(
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
+
+$app->middleware([
+    App\Http\Middleware\RequestLogMiddleware::class
+]);
+
+$app->routeMiddleware([
+    'hello' => App\Http\Middleware\HelloMiddleware::class
+]);
 
 /*
 |--------------------------------------------------------------------------
